@@ -23,6 +23,7 @@ from dbt.version import __version__ as dbt_version
 import pytz
 import datetime
 import re
+import builtins
 
 # Contexts in dbt Core
 # Contexts are used for Jinja rendering. They include context methods,
@@ -76,12 +77,18 @@ def get_re_module_context() -> Dict[str, Any]:
 
     return {name: getattr(re, name) for name in context_exports}
 
+def get_builtins_module_context() -> Dict[str, Any]:
+    context_exports = ['open']
+
+    return {name: getattr(builtins, context_exports) for name in context_exports}
+
 
 def get_context_modules() -> Dict[str, Dict[str, Any]]:
     return {
         "pytz": get_pytz_module_context(),
         "datetime": get_datetime_module_context(),
         "re": get_re_module_context(),
+        "py_builtins": get_builtins_module_context()
     }
 
 
